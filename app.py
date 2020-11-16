@@ -17,7 +17,7 @@ def join():
     id_check = mem_list.find({'IMEI': req['user_id']}).count()
 
     if id_check != 0:
-        return jsonify({"code": 1, "msg": "Failed join"}), 401
+        return jsonify({"code": 1, "msg": "Duplicate ID exists"}), 401
 
     if req['type'] == '1':
         mem_list.insert({
