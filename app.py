@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from pymongo import MongoClient
 
-conn = MongoClient('192.168.0.5')
+conn = MongoClient('192.168.35.213')
 
 db = conn.main_server
 
@@ -37,12 +37,13 @@ def login():
     req = request.get_json()
     mem_list = db.member
 
-    result = mem_list.find({'IMEI': req['IMEI']}).count()
+    result = mem_list.find_one({'user_id': req['user_id'], 'user_pw': req['user_pw']})
+    if result is None:
+        return jsonify({"code": "1", "msg": "No matching ID or PW exists"}), 401
 
-    if result == 1:
-        return jsonify({"code": 0, "msg": "Login success"})
-    else:
-        return jsonify({"code": 1, "msg": "Failed login"}), 401
+    del result['_id']
+    print(result)
+    return jsonify({'code': '0', 'msg': 'login success'}), 200
 
 
 if __name__ == '__main__':
