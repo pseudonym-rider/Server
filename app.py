@@ -15,9 +15,8 @@ def join():
     req = request.get_json()
     mem_list = db.member
     id_check = mem_list.find({'IMEI': req['user_id']}).count()
-    IMEI_check = mem_list.find({'IMEI': req['IMEI']}).count()
 
-    if id_check+IMEI_check != 0:
+    if id_check != 0:
         return jsonify({"code": 1, "msg": "Failed join"}), 401
 
     mem_list.insert({
