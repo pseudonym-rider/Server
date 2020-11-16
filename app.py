@@ -19,6 +19,17 @@ def join():
     if id_check != 0:
         return jsonify({"code": 1, "msg": "Failed join"}), 401
 
+    if req['type'] == '1':
+        mem_list.insert({
+            "user_id": req['user_id'],
+            "user_pw": req['user_pw'],
+            "user_name": req['user_name'],
+            "phone": req['phone'],
+            "birth": req['birth'],
+            "gender": req['gender'],
+            "type": req['type'],
+            "license": req['license']
+        })
     mem_list.insert({
         "user_id": req['user_id'],
         "user_pw": req['user_pw'],
