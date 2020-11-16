@@ -22,12 +22,12 @@ def join():
 
     mem_list.insert({
         "user_id": req['user_id'],
+        "user_pw": req['user_pw'],
         "user_name": req['user_name'],
         "phone": req['phone'],
         "birth": req['birth'],
         "gender": req['gender'],
-        "type": req['type'],
-        "IMEI": req['IMEI']
+        "type": req['type']
     })
 
     return jsonify({"code": 0, "msg": "Join success"})
