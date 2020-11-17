@@ -12,7 +12,7 @@ API 메인 서버입니다.
     |--- |--- |--- |
     | user_id | user id | string |
     | user_name | user name | string |
-    | password | user name | string |
+    | user_pw | user name | string |
     | phone | phone number | string |
     | birth | birthday | string |
     | gender | gender | string |
@@ -24,7 +24,7 @@ API 메인 서버입니다.
     |--- |--- |--- |
     | user_id | user id | string |
     | user_name | user name | string |
-    | password | user name | string |
+    | user_pw | user name | string |
     | phone | phone number | string |
     | birth | birthday | string |
     | gender | gender | string |
@@ -37,7 +37,7 @@ API 메인 서버입니다.
     |--- |--- |--- |
     | user_id | user id | string |
     | user_name | 소크라테스 | string |
-    | password | 1q2w3e | string |
+    | user_pw | 1q2w3e | string |
     | phone | 01012341234 | string |
     | birth | 970101 | string |
     | gender | M/F | string |
