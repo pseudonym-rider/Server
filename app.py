@@ -14,12 +14,12 @@ app = Flask(__name__)
 def join():
     req = request.get_json()
     mem_list = db.member
-    id_check = mem_list.find({'IMEI': req['user_id']}).count()
+    id_check = mem_list.find({'user_id': req['user_id']}).count()
 
     if id_check != 0:
         return jsonify({"code": 1, "msg": "Duplicate ID exists"}), 401
 
-    if req['type'] == '1':
+    if req['type'] == '2':
         mem_list.insert({
             "user_id": req['user_id'],
             "user_pw": req['user_pw'],
