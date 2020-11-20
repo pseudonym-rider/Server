@@ -69,7 +69,7 @@ API 메인 서버입니다.
 
 
 ## 로그인
-- URI : https:/tmp.prider.xyz/login
+- URI : https:/tmp.prider.xyz/auth
 - METHOD : POST
 - request
  
@@ -107,3 +107,86 @@ API 메인 서버입니다.
         |--- |--- |--- |
         | code | 0 | int |
         | msg | login success | string |
+        | user_name | user name | string |
+        | type | user type | string |
+        | access_token | token for access | string |
+        | refresh_token | token for refresh | string |
+        
+## 재발급
+- URI : https:/tmp.prider.xyz/refresh
+- METHOD : GET
+- request
+    
+    | key | explanation | type |
+    |--- |--- |--- 
+
+- example
+
+    | key | value | type |
+    |--- |--- |--- |
+
+- response code
+    - Header :
+        - Content-Type : application/json
+        - Authorization : Bearer \< Refresh token \>
+    - ERROR RESPONSE
+    
+        |    key   | explanation |   type  |
+        | -------- | ----------- |-------- |
+        |code| 오류 코드     | integer | 
+        |msg | 오류 내용  | string  |
+        
+        - code (오류 별 반환 내용 및 상태)
+        
+            | HTTP STATE | code | explanation |
+            |----------- | ---------- | ----------- |
+            | 401 |1| No matching ID or PW exists |
+           - 토큰 문제 관련 메세지 오류 결과 확인 바람
+    
+    - SUCCESS RESPONSE
+    
+        | key | value | type |
+        |--- |--- |--- |
+        | access_token | token for access | string |
+        | user_id | user id | string| 
+        
+## 사용자 정보 요청
+- URI : https:/tmp.prider.xyz/get_info
+- METHOD : GET
+- request
+ 
+    | key | explanation | type |
+    |--- |--- |--- |
+
+- example
+
+    | key | value | type |
+    |--- |--- |--- |
+
+- response code
+    - Header :
+        - Content-Type : application/json
+        - Authorization : Bearer \< Access token \>
+    - ERROR RESPONSE
+    
+        |    key   | explanation |   type  |
+        | -------- | ----------- |-------- |
+        |code| 오류 코드     | integer | 
+        |msg | 오류 내용  | string  |
+        
+        - code (오류 별 반환 내용 및 상태)
+        
+            | HTTP STATE | code | explanation |
+            |----------- | ---------- | ----------- |
+           - 토큰 문제 관련 메세지 오류 결과 확인 바람
+    
+    - SUCCESS RESPONSE
+    
+        | key | value | type |
+        |--- |--- |--- |
+        | user_id | user id | string |
+        | user_name | user name | string |
+        | gender | user gender | Char |
+        | birth | birth day | string |
+        | type | user type | string |
+        | phone | phone number | string |
