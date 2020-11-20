@@ -8,7 +8,7 @@ import encryption as crypt
 
 app = Flask(__name__)
 
-conn = MongoClient('192.168.123.40')
+conn = MongoClient(config.ip)
 db = conn.main_server
 collect = db.data
 
