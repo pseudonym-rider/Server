@@ -5,9 +5,7 @@ from flask_jwt_extended import (
 )
 import config
 
-
 app = Flask(__name__)
-
 
 conn = MongoClient('192.168.123.40')
 db = conn.main_server
@@ -54,7 +52,6 @@ def join():
 
 
 @app.route('/auth', methods=['POST'])
-@jwt_required
 def auth():
     req = request.get_json()
     mem_list = db.member
@@ -64,8 +61,24 @@ def auth():
         return jsonify({"code": "1", "msg": "No matching ID or PW exists"}), 401
 
     del result['_id']
+    access_token = create_access_token(identity=req['user_id'])
+    refresh_token = create_refresh_token(identity=req['user_id'])
+
     print(result)
-    return jsonify({'code': '0', 'msg': 'login success'}), 200
+
+    return jsonify(
+        code=0,
+        msg='login success',
+        access_token=access_token,
+        refresh_token=refresh_token
+    ), 200
+
+
+@app.route('/refresh', methods=['GET'])
+@jwt_refresh_token_required
+def refresh():
+    access_token = create_access_token(identity=get_jwt_identity())
+    return jsonify(access_token=access_token, user_id=get_jwt_identity())
 
 
 if __name__ == '__main__':
