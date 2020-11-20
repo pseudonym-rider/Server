@@ -1,13 +1,23 @@
 from flask import Flask, jsonify, request
 from pymongo import MongoClient
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_identity, jwt_refresh_token_required
+)
+import config
 
-conn = MongoClient('192.168.35.213')
-
-db = conn.main_server
-
-collect = db.data
 
 app = Flask(__name__)
+
+
+conn = MongoClient('192.168.123.40')
+db = conn.main_server
+collect = db.data
+
+app.config['JWT_SECRET_KEY'] = config.key
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = config.access
+app.config['JWT_REFRESH_TOKEN_EXPIRES'] = config.refresh
+
+jwt = JWTManager(app)
 
 
 @app.route('/join', methods=['POST'])
@@ -43,8 +53,9 @@ def join():
     return jsonify({"code": 0, "msg": "Join success"})
 
 
-@app.route('/login', methods=['POST'])
-def login():
+@app.route('/auth', methods=['POST'])
+@jwt_required
+def auth():
     req = request.get_json()
     mem_list = db.member
 
