@@ -4,6 +4,7 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_identity, jwt_refresh_token_required
 )
 import config
+import encryption as crypt
 
 app = Flask(__name__)
 
@@ -21,6 +22,7 @@ jwt = JWTManager(app)
 @app.route('/join', methods=['POST'])
 def join():
     req = request.get_json()
+    req['user_pw'] = crypt.encryption(req['user_pw'])
     mem_list = db.member
     id_check = mem_list.find({'user_id': req['user_id']}).count()
 
@@ -56,15 +58,15 @@ def auth():
     req = request.get_json()
     mem_list = db.member
 
-    result = mem_list.find_one({'user_id': req['user_id'], 'user_pw': req['user_pw']})
-    if result is None:
+    result = mem_list.find_one({'user_id': req['user_id']})
+    if result is None :
+        return jsonify({"code": "1", "msg": "No matching ID or PW exists"}), 401
+    if not crypt.compare(req['user_pw'], result['user_pw']):
         return jsonify({"code": "1", "msg": "No matching ID or PW exists"}), 401
 
     del result['_id']
     access_token = create_access_token(identity=req['user_id'])
     refresh_token = create_refresh_token(identity=req['user_id'])
-
-    print(result)
 
     return jsonify(
         code=0,
