@@ -69,6 +69,8 @@ def auth():
     return jsonify(
         code=0,
         msg='login success',
+        user_name=result['user_name'],
+        type=result['type'],
         access_token=access_token,
         refresh_token=refresh_token
     ), 200
@@ -79,6 +81,22 @@ def auth():
 def refresh():
     access_token = create_access_token(identity=get_jwt_identity())
     return jsonify(access_token=access_token, user_id=get_jwt_identity())
+
+
+@app.route('/get_info', methods=['GET'])
+@jwt_required
+def getInfo():
+    mem_list = db.member
+    result = mem_list.find_one({'user_id': get_jwt_identity()})
+
+    return jsonify(
+        user_id=result['user_id'],
+        user_name=result['user_name'],
+        phone=result['phone'],
+        birth=result['birth'],
+        gender=result['gender'],
+        type=result['type']
+    )
 
 
 if __name__ == '__main__':
