@@ -8,10 +8,6 @@ import encryption as crypt
 
 app = Flask(__name__)
 
-conn = MongoClient(config.ip)
-db = conn.main_server
-collect = db.data
-
 app.config['JWT_SECRET_KEY'] = config.key
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = config.access
 app.config['JWT_REFRESH_TOKEN_EXPIRES'] = config.refresh
@@ -23,7 +19,11 @@ jwt = JWTManager(app)
 def join():
     req = request.get_json()
     req['user_pw'] = crypt.encryption(req['user_pw'])
+
+    conn = MongoClient(config.ip)
+    db = conn.main_server
     mem_list = db.member
+
     id_check = mem_list.find({'user_id': req['user_id']}).count()
 
     if id_check != 0:
@@ -56,6 +56,9 @@ def join():
 @app.route('/auth', methods=['POST'])
 def auth():
     req = request.get_json()
+
+    conn = MongoClient(config.ip)
+    db = conn.main_server
     mem_list = db.member
 
     result = mem_list.find_one({'user_id': req['user_id']})
@@ -88,7 +91,10 @@ def refresh():
 @app.route('/get_info', methods=['GET'])
 @jwt_required
 def getInfo():
+    conn = MongoClient(config.ip)
+    db = conn.main_server
     mem_list = db.member
+    
     result = mem_list.find_one({'user_id': get_jwt_identity()})
 
     return jsonify(
