@@ -2,7 +2,7 @@
 API 메인 서버입니다.
 
 ## 회원가입
-- URI : https:/tmp.prider.xyz/join
+- URI : https://api.prider.xyz/join
 - METHOD : POST
 - request
  
@@ -69,7 +69,7 @@ API 메인 서버입니다.
 
 
 ## 로그인
-- URI : https:/tmp.prider.xyz/auth
+- URI : https://api.prider.xyz/auth
 - METHOD : POST
 - request
  
@@ -113,7 +113,7 @@ API 메인 서버입니다.
         | refresh_token | token for refresh | string |
         
 ## 재발급
-- URI : https:/tmp.prider.xyz/refresh
+- URI : https://api.prider.xyz/refresh
 - METHOD : GET
 - request
     
@@ -151,7 +151,7 @@ API 메인 서버입니다.
         | user_id | user id | string| 
         
 ## 사용자 정보 요청
-- URI : https:/tmp.prider.xyz/get_info
+- URI : https://api.prider.xyz/get_info
 - METHOD : GET
 - request
  
