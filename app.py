@@ -62,7 +62,7 @@ def auth():
     mem_list = db.member
 
     result = mem_list.find_one({'user_id': req['user_id']})
-    if result is None :
+    if result is None:
         return jsonify({"code": "1", "msg": "No matching ID or PW exists"}), 401
     if not crypt.compare(req['user_pw'], result['user_pw']):
         return jsonify({"code": "1", "msg": "No matching ID or PW exists"}), 401
@@ -94,7 +94,7 @@ def getInfo():
     conn = MongoClient(config.ip)
     db = conn.main_server
     mem_list = db.member
-    
+
     result = mem_list.find_one({'user_id': get_jwt_identity()})
 
     return jsonify(
@@ -105,6 +105,41 @@ def getInfo():
         gender=result['gender'],
         type=result['type']
     )
+
+
+@app.route('/alert-add', methods=['POST'])
+def alertAdd():
+    req = request.get_json()
+    conn = MongoClient(config.ip)
+    db = conn.main_server
+    alert = db.alert
+
+    to_insert = []
+    for member in req['data']:
+        to_insert.append({"user_id": member['user_id']})
+
+    try:
+        alert.insert_many(to_insert, ordered=False)
+    except:
+        pass
+    finally:
+        return jsonify(msg="Done")
+
+
+@app.route('/alert-check', methods=['GET'])
+@jwt_required
+def alertCheck():
+    conn = MongoClient(config.ip)
+    db = conn.main_server
+    alert = db.alert
+
+    user_id = request.args["user_id"]
+    result = alert.remove({'user_id': get_jwt_identity()})['n']
+
+    if result == 0:
+        return jsonify(code=0)
+
+    return jsonify(code=1)
 
 
 if __name__ == '__main__':
