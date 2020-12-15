@@ -5,6 +5,7 @@ from flask_jwt_extended import (
 )
 import config
 import encryption as crypt
+import license
 
 app = Flask(__name__)
 
@@ -30,6 +31,7 @@ def join():
         return jsonify({"code": 1, "msg": "Duplicate ID exists"}), 401
 
     if req['type'] == '2':
+        store = license.getData(req['license'])
         mem_list.insert({
             "user_id": req['user_id'],
             "user_pw": req['user_pw'],
@@ -38,7 +40,9 @@ def join():
             "birth": req['birth'],
             "gender": req['gender'],
             "type": req['type'],
-            "license": req['license']
+            "license": req['license'],
+            "store_name": store['store_name'],
+            "address": store['address']
         })
     mem_list.insert({
         "user_id": req['user_id'],
