@@ -8,12 +8,17 @@ def getData(license):
     html = req.text
     # print(html)
     soup = BeautifulSoup(html, 'html.parser')
-    title = soup.select('h4')
-    print(title[0].text)
-
-    location = soup.select('tr:nth-child(22)>td')
+    try:
+        title = soup.select('h4')[0].text
+        location = soup.select('tr:nth-child(22)>td')[0].text
+    except:
+        return {
+            'code': '1',
+            "msg": "invalid license"
+        }
 
     return {
-        'store_name': title[0].text,
-        'address': location[0].text.strip()
+        'code': '0',
+        'store_name': title,
+        'address': location
     }

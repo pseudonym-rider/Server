@@ -30,8 +30,20 @@ def join():
     if id_check != 0:
         return jsonify({"code": 1, "msg": "Duplicate ID exists"}), 401
 
-    if req['type'] == '2':
+    if req['type'] == '1':
+        mem_list.insert({
+            "user_id": req['user_id'],
+            "user_pw": req['user_pw'],
+            "user_name": req['user_name'],
+            "phone": req['phone'],
+            "birth": req['birth'],
+            "gender": req['gender'],
+            "type": req['type']
+        })
+    elif req['type'] == '2':
         store = license.getData(req['license'])
+        if store['code'] == '1':
+            return jsonify(store)
         mem_list.insert({
             "user_id": req['user_id'],
             "user_pw": req['user_pw'],
@@ -44,15 +56,13 @@ def join():
             "store_name": store['store_name'],
             "address": store['address']
         })
-    mem_list.insert({
-        "user_id": req['user_id'],
-        "user_pw": req['user_pw'],
-        "user_name": req['user_name'],
-        "phone": req['phone'],
-        "birth": req['birth'],
-        "gender": req['gender'],
-        "type": req['type']
-    })
+    elif req['type'] == '3':
+        mem_list.insert({
+            "user_id": req['user_id'],
+            "user_pw": req['user_pw'],
+            "type": req['type'],
+            "grant": "False"
+        })
 
     return jsonify({"code": 0, "msg": "Join success"})
 
