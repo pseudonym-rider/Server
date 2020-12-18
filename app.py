@@ -102,23 +102,61 @@ def refresh():
     return jsonify(access_token=access_token, user_id=get_jwt_identity())
 
 
+def isManager(user_id):
+    conn = MongoClient(config.ip)
+    db = conn.main_server
+    member = db.member
+
+    manager = member.find_one({'user_id': user_id})
+
+    if manager['type'] == '3':
+        if manager['grant'] == 'True':
+            return True
+
+    return False
+
+
 @app.route('/get_info', methods=['GET'])
 @jwt_required
 def getInfo():
+    try:
+        if not isManager(user_id=get_jwt_identity()):
+            return jsonify(code=1, msg="This user is not authorized."), 401
+    except Exception as e:
+        return jsonify(msg="Unregistered Manager"), 401
+
     conn = MongoClient(config.ip)
     db = conn.main_server
     mem_list = db.member
 
-    result = mem_list.find_one({'user_id': get_jwt_identity()})
+    result = mem_list.find_one({'user_id': request.args['type']})
 
-    return jsonify(
-        user_id=result['user_id'],
-        user_name=result['user_name'],
-        phone=result['phone'],
-        birth=result['birth'],
-        gender=result['gender'],
-        type=result['type']
-    )
+    if result['type'] == '1':
+        return jsonify(
+            user_id=result['user_id'],
+            user_name=result['user_name'],
+            phone=result['phone'],
+            birth=result['birth'],
+            gender=result['gender'],
+            type=result['type']
+        )
+    elif result['type'] == '2':
+        return jsonify(
+            user_id=result['user_id'],
+            user_name=result['user_name'],
+            phone=result['phone'],
+            birth=result['birth'],
+            gender=result['gender'],
+            type=result['type'],
+            license=result['license'],
+            store_name=result['store_name'],
+            address=result['address']
+        )
+    else:
+        return jsonify(
+            user_id=result['user_id'],
+            type=result['type']
+        )
 
 
 @app.route('/alert-add', methods=['POST'])
