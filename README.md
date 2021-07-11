@@ -3,7 +3,7 @@ API 메인 서버입니다.
 
 ## 회원가입
 - URI : https://api.prider.xyz/join
-- METHOD : POST
+- METHOD : POST 
 - request
  
 - 개인의 경우(type = 1)
@@ -190,3 +190,5 @@ API 메인 서버입니다.
         | birth | birth day | string |
         | type | user type | string |
         | phone | phone number | string |
+
+.
